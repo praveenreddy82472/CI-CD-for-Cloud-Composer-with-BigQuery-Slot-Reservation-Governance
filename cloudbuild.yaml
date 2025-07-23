@@ -3,7 +3,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - cp
-      - dags/*.py
+      - Dags/*.py
       - gs://us-central1-composer-dev-25fb2302-bucket/dags/
 
   # Optional: Wait or manual approval here (not added now)
@@ -12,7 +12,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - cp
-      - dags/*.py
+      - Dags/*.py
       - gs://us-central1-composer-prod-7873bc71-bucket/dags/
 
 options:
