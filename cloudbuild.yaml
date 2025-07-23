@@ -1,10 +1,19 @@
 steps:
+  # Step 1: Deploy DAG to Dev Composer bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args:
+      - cp
+      - dags/*.py
+      - gs://us-central1-composer-dev-25fb2302-bucket/dags/
 
-# Step 1: Deploy to Dev Composer
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'dags/*.py', 'us-central1-composer-dev-25fb2302-bucket/dags/']
+  # Optional: Wait or manual approval here (not added now)
 
-# Step 2: Wait & Deploy to Prod
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'dags/*.py', 'us-central1-composer-prod-7873bc71-bucket/dags/']
+  # Step 2: Deploy DAG to Prod Composer bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args:
+      - cp
+      - dags/*.py
+      - gs://us-central1-composer-prod-7873bc71-bucket/dags/
 
+options:
+  logging: CLOUD_LOGGING_ONLY
