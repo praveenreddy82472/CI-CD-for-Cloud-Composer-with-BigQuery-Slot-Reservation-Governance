@@ -1,1 +1,10 @@
+steps:
+
+# Step 1: Deploy to Dev Composer
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', 'dags/*.py', 'us-central1-composer-dev-25fb2302-bucket/dags/']
+
+# Step 2: Wait & Deploy to Prod
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', 'dags/*.py', 'us-central1-composer-prod-7873bc71-bucket/dags/']
 
