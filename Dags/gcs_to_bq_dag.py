@@ -3,19 +3,21 @@ from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobO
 from datetime import datetime
 import os
 
-# Get the environment from ENV variable (set in Composer config)
-ENV = os.getenv("ENV", "dev")  # default to "dev"
+# Get environment: dev or prod
+ENV = os.environ.get("ENV", "dev")
 
-# Set variables based on environment
-if ENV == "prod":
-    gcs_uri = "gs://healthpra18/healthcare_dataset.csv"
-    bq_table = "health_table"
+# Dynamic GCS and BQ settings
+if ENV == "dev":
+    source_uri = "gs://healthpra18/sample_healthcare_dataset.csv"
+    table_id = "health_table_dev"
+elif ENV == "prod":
+    source_uri = "gs://healthpra18/healthcare_dataset.csv"
+    table_id = "health_table"
 else:
-    gcs_uri = "gs://healthpra18/Health_sample.csv"  # only 100 rows
-    bq_table = "health_sample"
+    raise ValueError("Invalid ENV value. Use 'dev' or 'prod'.")
 
 with DAG(
-    dag_id=f'gcs_to_bq_{ENV}',  # makes dag_id unique per environment
+    dag_id='gcs_to_bq_with_reservation',
     schedule_interval='@daily',
     start_date=datetime(2024, 1, 1),
     catchup=False,
@@ -26,11 +28,11 @@ with DAG(
         task_id='load_csv',
         configuration={
             "load": {
-                "sourceUris": [gcs_uri],
+                "sourceUris": [source_uri],
                 "destinationTable": {
                     "projectId": "consummate-fold-466316-c3",
                     "datasetId": "health",
-                    "tableId": bq_table
+                    "tableId": table_id
                 },
                 "sourceFormat": "CSV",
                 "writeDisposition": "WRITE_TRUNCATE",
