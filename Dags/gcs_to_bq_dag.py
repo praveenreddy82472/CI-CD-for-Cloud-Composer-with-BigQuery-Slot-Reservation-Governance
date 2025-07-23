@@ -8,8 +8,8 @@ ENV = os.environ.get("ENV", "dev")
 
 # Dynamic GCS and BQ settings
 if ENV == "dev":
-    source_uri = "gs://healthpra18/sample_healthcare_dataset.csv"
-    table_id = "health_table_dev"
+    source_uri = "gs://healthpra18/Health_sample.csv"
+    table_id = "health_sample"
 elif ENV == "prod":
     source_uri = "gs://healthpra18/healthcare_dataset.csv"
     table_id = "health_table"
